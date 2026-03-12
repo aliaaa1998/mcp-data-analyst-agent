@@ -1,0 +1,5 @@
+region_id,region_name,market
+R1,North America,AMER
+R2,Europe,EMEA
+R3,Asia Pacific,APAC
+R4,Latin America,LATAM
