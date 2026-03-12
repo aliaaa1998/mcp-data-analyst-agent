@@ -8,7 +8,7 @@ from openai import AsyncOpenAI
 
 from app.core.config import get_settings
 from app.schemas.ask import AskResponse, ChartRef, Source, ToolCall
-from app.services.mcp_client import MCPClient, MCPToolResult
+from app.services.mcp_client import MCPClient
 
 logger = logging.getLogger(__name__)
 

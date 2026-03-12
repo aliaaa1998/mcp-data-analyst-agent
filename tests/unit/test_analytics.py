@@ -1,4 +1,8 @@
-from mcp_servers.analytics_server.analytics import calculate_growth, compare_periods, detect_anomalies
+from mcp_servers.analytics_server.analytics import (
+    calculate_growth,
+    compare_periods,
+    detect_anomalies,
+)
 
 
 def test_calculate_growth():

@@ -46,9 +46,9 @@ def invoke(payload: InvokeRequest) -> dict:
             sql = payload.arguments.get("sql", "")
             limit = int(payload.arguments.get("limit", 200))
             assert_read_only_sql(sql)
-            query = f"SELECT * FROM ({sql}) AS subq LIMIT {min(limit, 500)}"
             with engine.connect() as conn:
-                df = pd.read_sql_query(text(query), conn)
+                df = pd.read_sql_query(text(sql), conn)
+                df = df.head(min(limit, 500))
             logger.info("sql_query_executed", extra={"rows": len(df)})
             return {"ok": True, "result": {"rows": df.to_dict(orient="records"), "count": len(df)}}
         raise ValueError("Unknown tool")

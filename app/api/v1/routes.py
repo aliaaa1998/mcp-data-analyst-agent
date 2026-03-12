@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
@@ -16,6 +17,7 @@ from app.services.mcp_client import MCPClient
 
 router = APIRouter()
 settings = get_settings()
+DBSession = Annotated[Session, Depends(get_db)]
 
 
 def mcp_client() -> MCPClient:
@@ -34,13 +36,13 @@ def healthz() -> HealthResponse:
 
 
 @router.get("/readyz", response_model=HealthResponse)
-def readyz(db: Session = Depends(get_db)) -> HealthResponse:
+def readyz(db: DBSession) -> HealthResponse:
     db.execute(text("SELECT 1"))
     return HealthResponse(status="ready")
 
 
 @router.post("/api/v1/ask", response_model=AskResponse)
-async def ask(payload: AskRequest, db: Session = Depends(get_db)) -> AskResponse:
+async def ask(payload: AskRequest, db: DBSession) -> AskResponse:
     agent = OpenAIAnalystAgent(mcp_client())
     response = await agent.answer_question(payload.question, payload.allowed_tools)
     QuestionRunRepository(db).create(response)
@@ -50,7 +52,7 @@ async def ask(payload: AskRequest, db: Session = Depends(get_db)) -> AskResponse
 
 
 @router.get("/api/v1/questions/history")
-def history(db: Session = Depends(get_db)) -> list[dict]:
+def history(db: DBSession) -> list[dict]:
     runs = QuestionRunRepository(db).list_recent()
     return [{"id": r.id, "request_id": r.request_id, "question": r.question, "created_at": r.created_at} for r in runs]
 
@@ -61,7 +63,7 @@ async def tools() -> ToolRegistryResponse:
 
 
 @router.post("/api/v1/demo/load-data")
-def demo_load_data(db: Session = Depends(get_db)) -> dict:
+def demo_load_data(db: DBSession) -> dict:
     counts = load_sample_data(db)
     return {"status": "loaded", "counts": counts}
 
