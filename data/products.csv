@@ -1,0 +1,9 @@
+product_id,product_name,category,subcategory,price
+P001,Mobile 1,Electronics,Mobile,774.52
+P002,Laptop 2,Electronics,Laptop,49.51
+P003,Kitchen 3,Home,Kitchen,344.53
+P004,Furniture 4,Home,Furniture,283.39
+P005,Men 5,Fashion,Men,889.04
+P006,Women 6,Fashion,Women,818.51
+P007,Fitness 7,Sports,Fitness,1072.77
+P008,Skincare 8,Beauty,Skincare,122.59
